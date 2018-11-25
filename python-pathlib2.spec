@@ -1,4 +1,5 @@
-%bcond_with	doc	# don't build doc
+#
+# Conditional build:
 %bcond_without	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
@@ -7,29 +8,44 @@
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Name:		python-%{module}
-Version:	2.2.1
-Release:	2
+Version:	2.3.2
+Release:	1
 License:	MIT
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/ab/d8/ac7489d50146f29d0a14f65545698f4545d8a6b739b24b05859942048b56/pathlib2-%{version}.tar.gz
-# Source0-md5:	6c75bfde898b6c88627621a48ee8de14
-URL:		https://pypi.python.org/pypi/pathlib2/
+#Source0Download: https://pypi.org/simple/pathlib2/
+Source0:	https://files.pythonhosted.org/packages/source/p/pathlib2/pathlib2-%{version}.tar.gz
+# Source0-md5:	fd76fb5d0baa798bfe12fb7965da97f8
+URL:		https://pypi.org/project/pathlib2/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python-modules
-BuildRequires:	python-scandir
+BuildRequires:	python-modules >= 1:2.6
 BuildRequires:	python-setuptools
-BuildRequires:	python-test
+%if %{with tests}
+BuildRequires:	python-mock
+BuildRequires:	python-scandir
+BuildRequires:	python-six
+BuildRequires:	python-test >= 1:2.6
+%if "%{py_ver}" < "2.7"
+BuildRequires:	python-unittest2
+%endif
+%endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-modules
-BuildRequires:	python3-scandir
+BuildRequires:	python3-modules >= 1:3.3
 BuildRequires:	python3-setuptools
-BuildRequires:	python3-test
+%if %{with tests}
+%if "%{py3_ver}" < "3.3"
+BuildRequires:	python3-mock
 %endif
-Requires:	python-modules
-Requires:	python-scandir
+%if "%{py3_ver}" < "3.5"
+BuildRequires:	python3-scandir
+%endif
+BuildRequires:	python3-six
+BuildRequires:	python3-test >= 1:2.6
+%endif
+%endif
+Requires:	python-modules >= 1:2.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,14 +55,17 @@ module which tracks the standard library module, so all the newest
 features of the standard pathlib can be used also on older Python
 versions.
 
-# %%description -l pl.UTF-8
+%description -l pl.UTF-8
+Celem pathlib2 jest udostępnienie backportu modułu standardowego
+pathlib podążającego za modułem biblioteki standardowej, aby
+wszystkie najnowsze możliwości standardowego pathlib mogły być
+używane także ze starszymi wersjami Pythona.
 
 %package -n python3-%{module}
-Summary:	-
-Summary(pl.UTF-8):	-
+Summary:	Object-oriented filesystem paths
+Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Group:		Libraries/Python
-Requires:	python3-modules
-Requires:	python3-scandir
+Requires:	python3-modules >= 1:3.3
 
 %description -n python3-%{module}
 The goal of pathlib2 is to provide a backport of standard pathlib
@@ -54,18 +73,11 @@ module which tracks the standard library module, so all the newest
 features of the standard pathlib can be used also on older Python
 versions.
 
-# %%description -n python3-%{module} -l pl.UTF-8
-
-%package apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
-Group:		Documentation
-
-%description apidocs
-API documentation for %{module}.
-
-%description apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
+%description -n python3-%{module} -l pl.UTF-8
+Celem pathlib2 jest udostępnienie backportu modułu standardowego
+pathlib podążającego za modułem biblioteki standardowej, aby
+wszystkie najnowsze możliwości standardowego pathlib mogły być
+używane także ze starszymi wersjami Pythona.
 
 %prep
 %setup -q -n %{module}-%{version}
@@ -73,17 +85,19 @@ Dokumentacja API %{module}.
 
 %build
 %if %{with python2}
-%py_build %{?with_tests:test}
+%py_build
+
+%if %{with tests}
+%{__python} -m unittest discover -s tests
+%endif
 %endif
 
 %if %{with python3}
-%py3_build %{?with_tests:test}
-%endif
+%py3_build
 
-%if %{with doc}
-cd docs
-%{__make} -j1 html
-rm -rf _build/html/_sources
+%if %{with tests}
+%{__python3} -m unittest discover -s tests
+%endif
 %endif
 
 %install
@@ -91,9 +105,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with python2}
 %py_install
-
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
 
 %py_postclean
 %endif
@@ -108,23 +119,15 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc README.rst CHANGELOG.rst
-%{py_sitescriptdir}/%{module}.py*
-%{py_sitescriptdir}/%{module}-%{version}-py*.egg-info
+%doc CHANGELOG.rst LICENSE.rst README.rst
+%{py_sitescriptdir}/pathlib2
+%{py_sitescriptdir}/pathlib2-%{version}-py*.egg-info
 %endif
 
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
-%doc README.rst CHANGELOG.rst
-%{py3_sitescriptdir}/%{module}.py
-%{py3_sitescriptdir}/__pycache__/%{module}.*.py*
-%{py3_sitescriptdir}/%{module}-%{version}-py*.egg-info
-
-%endif
-
-%if %{with doc}
-%files apidocs
-%defattr(644,root,root,755)
-%doc docs/_build/html/*
+%doc CHANGELOG.rst LICENSE.rst README.rst
+%{py3_sitescriptdir}/pathlib2
+%{py3_sitescriptdir}/pathlib2-%{version}-py*.egg-info
 %endif
