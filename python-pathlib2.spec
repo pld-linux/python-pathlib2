@@ -8,13 +8,13 @@
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Name:		python-%{module}
-Version:	2.3.2
+Version:	2.3.4
 Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pathlib2/
 Source0:	https://files.pythonhosted.org/packages/source/p/pathlib2/pathlib2-%{version}.tar.gz
-# Source0-md5:	fd76fb5d0baa798bfe12fb7965da97f8
+# Source0-md5:	96da6398b3ea944417b84ccb25b171aa
 URL:		https://pypi.org/project/pathlib2/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
@@ -32,17 +32,14 @@ BuildRequires:	python-unittest2
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-modules >= 1:3.3
+BuildRequires:	python3-modules >= 1:3.4
 BuildRequires:	python3-setuptools
 %if %{with tests}
-%if "%{py3_ver}" < "3.3"
-BuildRequires:	python3-mock
-%endif
 %if "%{py3_ver}" < "3.5"
 BuildRequires:	python3-scandir
 %endif
 BuildRequires:	python3-six
-BuildRequires:	python3-test >= 1:2.6
+BuildRequires:	python3-test >= 1:3.4
 %endif
 %endif
 Requires:	python-modules >= 1:2.6
@@ -65,7 +62,7 @@ używane także ze starszymi wersjami Pythona.
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Group:		Libraries/Python
-Requires:	python3-modules >= 1:3.3
+Requires:	python3-modules >= 1:3.4
 
 %description -n python3-%{module}
 The goal of pathlib2 is to provide a backport of standard pathlib
