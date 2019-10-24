@@ -8,13 +8,13 @@
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Name:		python-%{module}
-Version:	2.3.4
+Version:	2.3.5
 Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pathlib2/
 Source0:	https://files.pythonhosted.org/packages/source/p/pathlib2/pathlib2-%{version}.tar.gz
-# Source0-md5:	96da6398b3ea944417b84ccb25b171aa
+# Source0-md5:	f2bd0a363eb0f8fa0556f35c1d9e66fb
 URL:		https://pypi.org/project/pathlib2/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
@@ -78,7 +78,6 @@ używane także ze starszymi wersjami Pythona.
 
 %prep
 %setup -q -n %{module}-%{version}
-
 
 %build
 %if %{with python2}
