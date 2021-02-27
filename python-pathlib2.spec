@@ -9,7 +9,7 @@ Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Name:		python-%{module}
 Version:	2.3.5
-Release:	3
+Release:	4
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pathlib2/
