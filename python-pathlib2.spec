@@ -8,41 +8,36 @@
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Name:		python-%{module}
-Version:	2.3.5
-Release:	4
+Version:	2.3.7.post1
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/pathlib2/
 Source0:	https://files.pythonhosted.org/packages/source/p/pathlib2/pathlib2-%{version}.tar.gz
-# Source0-md5:	f2bd0a363eb0f8fa0556f35c1d9e66fb
+# Source0-md5:	a8a4d8f897e709006a4586cf2102edc6
 URL:		https://pypi.org/project/pathlib2/
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python-modules >= 1:2.6
+BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-setuptools
 %if %{with tests}
 BuildRequires:	python-mock
 BuildRequires:	python-scandir
 BuildRequires:	python-six
 BuildRequires:	python-test >= 1:2.6
-%if "%{py_ver}" < "2.7"
-BuildRequires:	python-unittest2
-%endif
+BuildRequires:	python-typing
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-modules >= 1:3.4
+BuildRequires:	python3-modules >= 1:3.5
 BuildRequires:	python3-setuptools
 %if %{with tests}
-%if "%{py3_ver}" < "3.5"
-BuildRequires:	python3-scandir
-%endif
 BuildRequires:	python3-six
-BuildRequires:	python3-test >= 1:3.4
+BuildRequires:	python3-test >= 1:3.5
 %endif
 %endif
-Requires:	python-modules >= 1:2.6
+Requires:	python-modules >= 1:2.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -62,7 +57,7 @@ używane także ze starszymi wersjami Pythona.
 Summary:	Object-oriented filesystem paths
 Summary(pl.UTF-8):	Zorientowane obiektowo ścieżki systemu plików
 Group:		Libraries/Python
-Requires:	python3-modules >= 1:3.4
+Requires:	python3-modules >= 1:3.5
 
 %description -n python3-%{module}
 The goal of pathlib2 is to provide a backport of standard pathlib
